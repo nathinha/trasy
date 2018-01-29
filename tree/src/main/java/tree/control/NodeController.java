@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import tree.model.Identifier;
 import tree.model.Node;
 import tree.util.HibernateUtil;
 
@@ -67,12 +68,12 @@ public class NodeController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/node")
-    public Long addNode(@RequestParam(value = "code", required = false) String code, //
+    public Identifier addNode(@RequestParam(value = "code", required = false) String code, //
 	    @RequestParam(value = "description", required = false) String description, //
 	    @RequestParam(value = "parentId", required = false) Long parentId, //
 	    @RequestParam(value = "detail", required = false) String detail) {
 
-	Long id = null;
+	Identifier id = new Identifier();
 
 	Session session = HibernateUtil.getSessionFactory().openSession();
 	Transaction tx = null;
@@ -81,11 +82,11 @@ public class NodeController {
 
 	try {
 	    if (parentId == null && hasRoot()) {
-		return id;
+		return null;
 	    }
 
 	    tx = session.beginTransaction();
-	    id = (Long) session.save(node);
+	    id.setId((Long) session.save(node));
 	    tx.commit();
 
 	} catch (Exception e) {
@@ -98,26 +99,26 @@ public class NodeController {
 	}
 
 	if (parentId != null) {
-	    addChild(parentId, id);
+	    addChild(parentId, id.getId());
 	}
 
 	return id;
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/node")
-    public Long updateNode(@RequestParam(value = "id") Long id, //
+    public Identifier updateNode(@RequestParam(value = "id") Long id, //
 	    @RequestParam(value = "code", required = false) String code, //
 	    @RequestParam(value = "description", required = false) String description, //
 	    @RequestParam(value = "parentId", required = false) Long parentId, //
 	    @RequestParam(value = "detail", required = false) String detail) {
 
-	Long childId = null;
+	Identifier childId = new Identifier();
 
 	Session session = HibernateUtil.getSessionFactory().openSession();
 	Transaction tx = null;
 
 	if (id == null) {
-	    return childId;
+	    return null;
 	}
 
 	Node node = session.get(Node.class, id);
@@ -140,7 +141,7 @@ public class NodeController {
 
 	try {
 	    tx = session.beginTransaction();
-	    childId = (Long) session.save(node);
+	    childId.setId((Long) session.save(node));
 	    tx.commit();
 	} catch (Exception e) {
 	    if (tx != null) {
@@ -154,8 +155,8 @@ public class NodeController {
 	if (parentId != null) {
 	    Long oldParentId = node.getParentId();
 
-	    removeChild(oldParentId, childId);
-	    addChild(parentId, childId);
+	    removeChild(oldParentId, childId.getId());
+	    addChild(parentId, childId.getId());
 	}
 
 	return childId;
