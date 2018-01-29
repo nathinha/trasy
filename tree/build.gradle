@@ -40,5 +40,9 @@ dependencies {
 	
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web
 	compile 'org.springframework.boot:spring-boot-starter-web:1.5.9.RELEASE'
+	
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-tomcat
+	providedCompile 'org.springframework.boot:spring-boot-starter-tomcat:1.5.9.RELEASE'
+	
 }
 
