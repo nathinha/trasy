@@ -1,6 +1,5 @@
 package tree.control;
 
-import java.security.InvalidParameterException;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -9,10 +8,16 @@ import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import tree.model.Node;
 import tree.util.HibernateUtil;
 
+@RestController
 public class NodeController {
 
     private boolean hasRoot() {
@@ -61,8 +66,13 @@ public class NodeController {
 	}
     }
 
-    public Long addNode(String code, String description, Long parentId, String detail) {
-	Long nodeId = null;
+    @RequestMapping(method = RequestMethod.POST, path = "/node")
+    public Long addNode(@RequestParam(value = "code", required = false) String code, //
+	    @RequestParam(value = "description", required = false) String description, //
+	    @RequestParam(value = "parentId", required = false) Long parentId, //
+	    @RequestParam(value = "detail", required = false) String detail) {
+
+	Long id = null;
 
 	Session session = HibernateUtil.getSessionFactory().openSession();
 	Transaction tx = null;
@@ -71,11 +81,11 @@ public class NodeController {
 
 	try {
 	    if (parentId == null && hasRoot()) {
-		throw new InvalidParameterException("Root node already exists");
+		return id;
 	    }
 
 	    tx = session.beginTransaction();
-	    nodeId = (Long) session.save(node);
+	    id = (Long) session.save(node);
 	    tx.commit();
 
 	} catch (Exception e) {
@@ -88,20 +98,26 @@ public class NodeController {
 	}
 
 	if (parentId != null) {
-	    addChild(parentId, nodeId);
+	    addChild(parentId, id);
 	}
 
-	return nodeId;
+	return id;
     }
 
-    public Long updateNode(Long id, String code, String description, Long parentId, String detail) {
+    @RequestMapping(method = RequestMethod.PUT, path = "/node")
+    public Long updateNode(@RequestParam(value = "id") Long id, //
+	    @RequestParam(value = "code", required = false) String code, //
+	    @RequestParam(value = "description", required = false) String description, //
+	    @RequestParam(value = "parentId", required = false) Long parentId, //
+	    @RequestParam(value = "detail", required = false) String detail) {
+
 	Long childId = null;
 
 	Session session = HibernateUtil.getSessionFactory().openSession();
 	Transaction tx = null;
 
 	if (id == null) {
-	    throw new InvalidParameterException("Need node ID to update it");
+	    return childId;
 	}
 
 	Node node = session.get(Node.class, id);
@@ -145,6 +161,7 @@ public class NodeController {
 	return childId;
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = "/node")
     public List<Node> getRoot() {
 	Session session = HibernateUtil.getSessionFactory().openSession();
 
@@ -160,7 +177,8 @@ public class NodeController {
 	return root;
     }
 
-    public List<Node> getChildren(Long id) {
+    @RequestMapping(method = RequestMethod.GET, path = "/node/{id}")
+    public List<Node> getChildren(@PathVariable Long id) {
 	Session session = HibernateUtil.getSessionFactory().openSession();
 	Node node = session.get(Node.class, id);
 	session.close();
