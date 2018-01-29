@@ -1,4 +1,4 @@
-package tree.control;
+package org.treasy.tree.control;
 
 import java.util.List;
 
@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import tree.model.Identifier;
-import tree.model.Node;
-import tree.util.HibernateUtil;
+import org.treasy.tree.model.Identifier;
+import org.treasy.tree.model.Node;
+import org.treasy.tree.util.HibernateUtil;
 
 @RestController
 public class NodeController {

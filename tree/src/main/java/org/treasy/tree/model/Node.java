@@ -1,4 +1,4 @@
-package tree.model;
+package org.treasy.tree.model;
 
 import java.util.ArrayList;
 import java.util.List;

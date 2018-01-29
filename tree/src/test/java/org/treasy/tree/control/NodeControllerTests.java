@@ -1,4 +1,4 @@
-package tree.control;
+package org.treasy.tree.control;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -13,10 +13,9 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-
-import tree.model.Identifier;
-import tree.model.Node;
-import tree.util.HibernateUtil;
+import org.treasy.tree.model.Identifier;
+import org.treasy.tree.model.Node;
+import org.treasy.tree.util.HibernateUtil;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class NodeControllerTests {

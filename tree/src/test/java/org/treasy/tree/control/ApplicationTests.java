@@ -1,4 +1,4 @@
-package tree.control;
+package org.treasy.tree.control;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

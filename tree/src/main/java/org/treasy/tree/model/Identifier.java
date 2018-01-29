@@ -1,4 +1,4 @@
-package tree.model;
+package org.treasy.tree.model;
 
 public class Identifier {
 

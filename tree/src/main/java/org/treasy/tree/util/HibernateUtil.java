@@ -1,4 +1,4 @@
-package tree.util;
+package org.treasy.tree.util;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,8 +8,7 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Environment;
-
-import tree.model.Node;
+import org.treasy.tree.model.Node;
 
 public class HibernateUtil {
     private static final SessionFactory sessionFactory = getSessionFactory();
